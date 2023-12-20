@@ -1,4 +1,6 @@
 # Adaptive Partitioning for Chance-Constrained Problems with Finite Support
+![Tests badge](https://github.com/alexforel/AdaptiveCC/actions/workflows/main.yml/badge.svg?branch=main)
+
 This code can be used to reproduce all results in the paper titled "Adaptive Partitioning for Chance-Constrained Problems with Finite Support by Marius Roland, Alexandre Forel, and Thibaut Vidal.
 
 [Paper available here](https://optimization-online.org/2023/12/adaptive-partitioning-for-chance-constrained-problems-with-finite-support/)   |   [Short video presentation](https://youtu.be/KMPqVof2k2U?feature=shared)
@@ -29,7 +31,7 @@ The main scripts that run experiments and process the results are in the root fo
 * `tests`: a set of unit and integration tests.
 
 ## How to reproduce the paper results
-All experiments are run using the 'main.py' script and providing the relevant arguments. This can be done using a bash script. For instance, the following runs all experiments used in the paper:
+All experiments are run using the `main.py` script and providing the relevant arguments. This can be done using a bash script. For instance, the following runs all experiments used in the paper:
 ```shell
 files=("ccmknap-10-10" "ccmknap-20-10" "ccmknap-40-30")
 scenarios=(500 1000 3000 5000)
