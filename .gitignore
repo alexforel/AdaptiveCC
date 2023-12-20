@@ -1,0 +1,9 @@
+*~
+*.lp
+__pycache__/
+results/
+build/
+*.pyd
+*.so
+*.cpp
+*.c
