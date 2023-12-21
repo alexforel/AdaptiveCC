@@ -35,6 +35,10 @@ os.environ["VECLIB_MAXIMUM_THREADS"] = str(NUM_THREADS)
 os.environ["NUMEXPR_NUM_THREADS"] = str(NUM_THREADS)
 os.environ['OPENBLAS_NUM_THREADS'] = str(NUM_THREADS)
 
+# Create folders for results
+if not os.path.exists(OUTPUT_FILE_LOCATION):
+    os.makedirs(OUTPUT_FILE_LOCATION)
+
 # Load instance data
 chance_instance = ChanceKnapInstance(FILE_LOCATION,
                                      USE_CONTINUOUS_VAR,
@@ -49,8 +53,7 @@ output_file_name = (OUTPUT_FILE_LOCATION + file_name + "-" +
                     str(METHOD))
 computation_output_file_name = output_file_name + ".csv"
 iteration_output_file_name = output_file_name + "-iter.csv"
-
-print(computation_output_file_name)
+print('Running experiment:', computation_output_file_name)
 
 
 # Timeout handler to stop the process when the time limit is reached
@@ -59,7 +62,16 @@ def timeout_handler(signum, frame):
 
 
 # Raise alarm when time limit is reached and call the handler
-signal.signal(signal.SIGALRM, timeout_handler)
+try:
+    signal.signal(signal.SIGALRM, timeout_handler)
+except AttributeError:
+    print('\n--                 ! Warning !                 --')
+    print('The timeout signal handler is designed for Unix systems.')
+    print('The code will run but the timeout exception will not')
+    print('be handled correctly, and will throw an error not')
+    print('after the time limit of', TIME_LIMIT, 'seconds.')
+    print('--                 ! Warning !                 --\n')
+
 
 if METHOD == 1:
     method = MilpSolver(chance_instance, time_limit=TIME_LIMIT, gap=GAP)
@@ -102,5 +114,5 @@ elif METHOD == 4:
 # Writing everything to the file
 TimeManager.set_final_time()
 method.write_all_computation_details(computation_output_file_name)
-if WITH_ITERATION_INFO and METHOD in [3, 4, 5, 6]:
+if WITH_ITERATION_INFO and METHOD in [3, 4]:
     method.write_iteration_details(iteration_output_file_name)
