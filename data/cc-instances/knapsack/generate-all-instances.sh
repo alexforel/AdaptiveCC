@@ -9,6 +9,6 @@ for instanceFile in "${files[@]}"
 do
     for scenarioQty in "${scenarios[@]}"
     do
-	python3 instance-generator.py $"${inputPath}${instanceFile}" $scenarioQty $instanceQty
+	python instance-generator.py $"${inputPath}${instanceFile}" $scenarioQty $instanceQty
     done
 done

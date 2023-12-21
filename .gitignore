@@ -3,6 +3,7 @@
 __pycache__/
 results/
 build/
+data/cc-instances/knapsack/*.csv
 *.pyd
 *.so
 *.cpp

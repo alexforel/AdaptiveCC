@@ -31,42 +31,4 @@ The main scripts that run experiments and process the results are in the root fo
 * `tests`: a set of unit and integration tests.
 
 ## How to reproduce the paper results
-All experiments are run using the `main.py` script and providing the relevant arguments. This can be done using a bash script. For instance, the following runs all experiments used in the paper:
-```shell
-files=("ccmknap-10-10" "ccmknap-20-10" "ccmknap-40-30")
-scenarios=(500 1000 3000 5000)
-indexes=5
-continuous_vars=(0 1)
-epsilons=(0.1 0.2)
-methods=(1 2 3 4)
-
-main_path="./cclp-adaptive/main.py"
-input_path="./cclp-adaptive/data/cc-instances/knapsack/"
-output_path="./cclp-adaptive/results/tables/"
-
-for file in "${files[@]}"
-	do
-	for scenario in "${scenarios[@]}"
-		do
-		for index in $(seq 1 $indexes)
-			do
-			for continuous_var in "${continuous_vars[@]}"
-				do
-				for epsilon in  "${epsilons[@]}"
-					do
-					for method in "${methods[@]}"
-						do
-						file_name="${input_path}${file}-$scenario-${index}.csv"
-						python main.py $main_path $file_name $continuous_var $epsilon $method $output_path
-						wait
-						sleep 2
-					done
-				done
-			done
-		done
-	done
-done
-
-```
-
-Run the script `export_results` to generate the csv files used to create the tables and figures presented in the paper.
+All experiments are run using the `main.py` script and providing the relevant arguments. This can be done using a bash script. For instance, the script `run_all_experiments.sh` can be used to run all experiments presented in the paper. Run the script `export_results` to read the experiment results and generate the csv files used to create the tables and figures.

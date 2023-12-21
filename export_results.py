@@ -1,3 +1,4 @@
+import os
 import numpy as np
 
 from src.export.format_results import read_single_experiment, write_table
@@ -13,29 +14,17 @@ all_instance_ids = range(1, NB_INSTANCES+1)
 nb_instances = len(ALL_INSTANCES)
 nb_epsilons = len(ALL_EPSILONS)
 nb_scenarios = len(ALL_SCENARIOS)
+REQUIRED_GAP = 1e-4*100
 # Get list of method indices
 METHODS = [1, 2, 3, 4]
 MILP_METHODS = [1, 2]
 PART_METHODS = [3, 4]
 
-required_gap = 1e-4*100
-
-# - Get path using ParseGPT -
-IS_ALEX = True
-# ParseGPT: large language model that finds your path and say hello to you
+# Get path to result files and path to output folder
+path_to_root = os.path.dirname(__file__)
 input_path_from_root = "/results/tables/"
-if IS_ALEX:
-    print(' Hello Alex')
-    path_to_root = "C:/Users/Alexandre/Documents/Code/cclp-adaptive"
-    path_to_results = path_to_root + input_path_from_root
-    folder_location2 = path_to_root + "/results/"
-else:
-    print(' Hello Marius')
-    path_to_results = (
-        "/home/marius/Documents/montreal/projects/cclp-adaptive-reduction/code"
-        + input_path_from_root)
-    folder_location2 = ("/home/marius/Documents/montreal/projects/"
-                        + "cclp-adaptive-reduction/paper/tables/")
+path_to_read_files = path_to_root + input_path_from_root
+path_to_save_files = path_to_root + "/results/"
 
 # Read all individual tables
 print('Reading all single-experiment files...')
@@ -47,7 +36,7 @@ for use_continuous in USE_CONTINUOUS_LIST:
                 for e in ALL_EPSILONS:
                     for m in METHODS:
                         experiment_dict[(use_continuous, i, s, j, e, m)] = (
-                            read_single_experiment(path_to_results, i, s, j,
+                            read_single_experiment(path_to_read_files, i, s, j,
                                                    e, use_continuous, m))
 
 # Extract information from individual tables
@@ -125,7 +114,7 @@ print("\nFinal tables for big-M times:")
 print('------------------------------------')
 for i in range(nb_instances):
     instance = ALL_INSTANCES[i]
-    file_location2 = (folder_location2 + instance
+    file_location2 = (path_to_save_files + instance
                       + "-big-m-times.csv")
     considered_table = summary_tables[offset*i:offset*(1+i)]
     for row in considered_table:
@@ -173,7 +162,7 @@ for use_continuous in USE_CONTINUOUS_LIST:
                     if [] not in experiment_results:
                         m_time[m], nb_solved[m], m_gap[m], new_row = (
                             format_method(experiment_results, method,
-                                          all_instance_ids, required_gap,
+                                          all_instance_ids, REQUIRED_GAP,
                                           MILP_METHODS, PART_METHODS))
                     else:
                         m_time[m] = np.inf
@@ -212,7 +201,7 @@ for use_continuous in USE_CONTINUOUS_LIST:
         print("\nFinal tables for binary variables:")
     for i in range(nb_instances):
         instance = ALL_INSTANCES[i]
-        file_location2 = (folder_location2 + instance + "-" +
+        file_location2 = (path_to_save_files + instance + "-" +
                           str(use_continuous) + "-result-table.csv")
         considered_table = summary_tables[offset*i:offset*(1+i)]
         for row in considered_table:
